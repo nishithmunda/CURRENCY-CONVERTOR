@@ -10,10 +10,10 @@ const BASE_URL=`https://v6.exchangerate-api.com/v6/${REACT_APP_API_KEY}/latest/I
 function App() {
 
   const [currencyOptions,setCurrencyOptions]=useState([])
-  const [fromCurrency,setFromCurrency]=useState()
-  const [toCurrency,setToCurrency]=useState()
+  const [fromCurrency,setFromCurrency]=useState('')
+  const [toCurrency,setToCurrency]=useState('')
   const [exchangeRate,setExchangeRate]=useState()
-  const [amount,setAmount]=useState(1)
+  const [amount,setAmount]=useState(0)
   const [amountInFromCurrency,setAmountInFromCurrency]=useState(true)
 
 
@@ -32,14 +32,15 @@ function App() {
      loadCurrenyOptions()
   },[])
 
+
+  
   useEffect(()=>{
     if(fromCurrency !=null && toCurrency!=null)
      {
-      const changeInCurrenyOptions=async()=>{
-    
+      const changeInCurrenyOptions=async()=>{ 
         await axios.get(`https://v6.exchangerate-api.com/v6/${REACT_APP_API_KEY}/pair/${fromCurrency}/${toCurrency}`)
             .then(res=>{
-              setExchangeRate(res.data.conversion_rate)
+              setExchangeRate(res?.data?.conversion_rate)
             })
         
       }
@@ -47,17 +48,20 @@ function App() {
      }
   },[fromCurrency,toCurrency])
 
- 
+
 
   const loadCurrenyOptions= async()=>{
        await axios.get(BASE_URL)
        .then((response)=>{
-       const firstCurrency=Object.keys(response.data.conversion_rates)[0]  
-       setCurrencyOptions([...Object.keys(response.data.conversion_rates)])
-       setFromCurrency(response.data.base_code)
+       const CurrencyKey=Object.keys(response?.data?.conversion_rates) //convert object to an ARRAY
+       const firstCurrency=CurrencyKey[0]  
+       setCurrencyOptions([...CurrencyKey])
+       setFromCurrency(response?.data?.base_code)
        setToCurrency(firstCurrency)
-       setExchangeRate(response.data.conversion_rates[firstCurrency])
-       }) 
+       setExchangeRate(response?.data?.conversion_rates[firstCurrency])
+       })
+       .catch(error=>console.log(error))
+
   }
 
   function handleFromAmountChange(e){
