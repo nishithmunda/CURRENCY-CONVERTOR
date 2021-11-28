@@ -10,8 +10,8 @@ const BASE_URL=`https://v6.exchangerate-api.com/v6/${REACT_APP_API_KEY}/latest/I
 function App() {
 
   const [currencyOptions,setCurrencyOptions]=useState([])
-  const [fromCurrency,setFromCurrency]=useState('')
-  const [toCurrency,setToCurrency]=useState('')
+  const [fromCurrency,setFromCurrency]=useState('INR')
+  const [toCurrency,setToCurrency]=useState('INR')
   const [exchangeRate,setExchangeRate]=useState()
   const [amount,setAmount]=useState(0)
   const [amountInFromCurrency,setAmountInFromCurrency]=useState(true)
